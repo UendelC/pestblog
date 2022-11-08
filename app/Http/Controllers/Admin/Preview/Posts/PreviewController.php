@@ -2,14 +2,21 @@
 
 namespace App\Http\Controllers\Admin\Preview\Posts;
 
+use App\Contracts\Actions\Resources\ProvidesArticleResource;
 use App\Http\Controllers\Controller;
-use Illuminate\Contracts\View\View;
+use Illuminate\Http\Request;
+use Inertia\Response;
 use Wink\WinkPost;
 
 class PreviewController extends Controller
 {
-    public function __invoke(WinkPost $post): View
-    {
-        return view('admin.preview', compact('post'));
+    public function __invoke(
+        Request $request,
+        WinkPost $article,
+        ProvidesArticleResource $articleResourceProvider
+    ): Response {
+        return inertia('Article', [
+            'article' => $articleResourceProvider->handle($article, $request),
+        ]);
     }
 }
